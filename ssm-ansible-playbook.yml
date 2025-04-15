@@ -1,23 +1,33 @@
 ---
 - hosts: all
-    become: true
+  become: true
 
-    tasks:
-    - name: gather ec2 facts
-      action: ec2_facts
+  tasks:
+    - name: Gather EC2 facts
+      ec2_facts:
 
-    - name: install apache on redhat or centos instances
-      yum: name=httpd state=present
+    - name: Install Apache on RedHat or CentOS
+      yum:
+        name: httpd
+        state: present
       when: ansible_os_family == "RedHat"
 
-    - name: install apache on debian or ubuntu instances
-      apt: name=apache2 state=present
+    - name: Install Apache on Debian or Ubuntu
+      apt:
+        name: apache2
+        state: present
       when: ansible_os_family == "Debian"
 
-    - name: enable apache on startup and start service for redhat or centos
-      service: name=httpd enabled=yes state=started
+    - name: Enable and start Apache on RedHat or CentOS
+      service:
+        name: httpd
+        enabled: yes
+        state: started
       when: ansible_os_family == "RedHat"
 
-    - name: enable apache on startup and start service for debian or ubuntu
-      service: name=apache2 enabled=yes state=started
+    - name: Enable and start Apache on Debian or Ubuntu
+      service:
+        name: apache2
+        enabled: yes
+        state: started
       when: ansible_os_family == "Debian"
